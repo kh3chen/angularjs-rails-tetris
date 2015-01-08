@@ -28,8 +28,7 @@ class HighscoresController < ApplicationController
 
     respond_to do |format|
       if @highscore.save
-        format.html { redirect_to @highscore, notice: 'Highscore was successfully created.' }
-        format.json { render :show, status: :created, location: @highscore }
+        format.json { render json: @highscore, status: :created}
       else
         format.html { render :new }
         format.json { render json: @highscore.errors, status: :unprocessable_entity }
