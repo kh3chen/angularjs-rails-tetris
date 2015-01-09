@@ -32,9 +32,9 @@ class Grid
 
 # We will have exactly one instance of this at a time. This is our active moveable block.
 class Block
-  boxLeft
-  boxTop
-  boxSize
+  top       # Add to cell row (i)
+  left      # Add to cell col (j)
+
   cells: [] # This is relative to the box
 
   constructor: ->
@@ -45,14 +45,13 @@ class Block
     #code
 
   iBlock: ->
-    boxTop = 0
-    boxLeft = 3
-    boxSize = 4
+    top = 0.5
+    left = 4.5
     cells =
-      [ [1, 0],
-        [1, 1],
-        [1, 2],
-        [1, 3] ]
+      [ [-0.5, -1.5],
+        [-0.5, -0.5],
+        [-0.5, 0.5],
+        [-0.5, 1.5] ]
     # ______
     # |    |
     # |####|
@@ -61,58 +60,54 @@ class Block
     # ------
 
   jBlock: ->
-    boxTop = 0
-    boxLeft = 3
-    boxSize = 3
+    top = 0
+    left = 4
     cells =
-      [ [0, 0],
-        [1, 0],
-        [1, 1],
-        [1, 2] ]
+      [ [0, -1],
+        [0, 0],
+        [0, 1],
+        [1, 1] ]
     # _____
-    # |#  |
-    # |###|
     # |   |
+    # |###|
+    # |  #|
     # -----
 
   lBlock: ->
-    boxTop = 0
-    boxLeft = 3
-    boxSize = 3
+    top = 0
+    left = 4
     cells =
-      [ [0, 3],
-        [1, 0],
-        [1, 1],
-        [1, 2] ]
+      [ [0, -1],
+        [0, 0],
+        [0, 1],
+        [1, -1] ]
     # _____
-    # |  #|
-    # |###|
     # |   |
+    # |###|
+    # |#  |
     # -----
 
   oBlock: ->
-    boxTop = 0
-    boxLeft = 4
-    boxSize = 2
+    top = 0.5
+    left = 4.5
     cells =
-      [ [0, 0],
-        [0, 1],
-        [1, 0],
-        [1, 1] ]
+      [ [-0.5, -0.5],
+        [-0.5, 0.5],
+        [0.5, -0.5],
+        [0.5, 0.5] ]
     # ____
     # |##|
     # |##|
     # ----
 
   sBlock: ->
-    boxTop = 0
-    boxLeft = 3
-    boxSize = 3
+    top = 1
+    left = 4
     cells =
-      [ [0, 1],
-        [0, 2],
-        [1, 0],
-        [1, 1] ]
+      [ [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 0] ]
     # _____
     # | ##|
     # |## |
@@ -120,29 +115,27 @@ class Block
     # -----
 
   tBlock: ->
-    boxTop = 0
-    boxLeft = 3
-    boxSize = 3
+    top = 0
+    left = 4
     cells =
-      [ [0, 1],
-        [1, 0],
-        [1, 1],
-        [1, 2] ]
+      [ [0, -1],
+        [0, 0],
+        [0, 1],
+        [1, 0] ]
     # _____
-    # | # |
-    # |###|
     # |   |
+    # |###|
+    # | # |
     # -----
 
   zBlock: ->
-    boxTop = 0
-    boxLeft = 3
-    boxSize = 3
+    top = 1
+    left = 4
     cells =
-      [ [0, 0],
-        [0, 1],
-        [1, 1],
-        [1, 2] ]
+      [ [-1, -1],
+        [-1, 0],
+        [0, 0],
+        [0, 1] ]
     # _____
     # |## |
     # | ##|
