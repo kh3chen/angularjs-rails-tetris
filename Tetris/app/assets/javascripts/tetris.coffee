@@ -8,7 +8,7 @@ class Cell
 
 # Values should be one of ' ', I, S, Z, O, L, J, T
   getValue: ->
-    value
+    @value
 
   setFilled: (@filled) ->
 
@@ -17,8 +17,9 @@ class Grid
 
   constructor: ->
     for i in [0..21]
+      @cells.push([])
       for j in [0..9]
-        cells[i][j] = new Cell(i, j)
+        @cells[i].push( Cell(i, j) )
 
   draw: ->
     rowText = ''
@@ -28,7 +29,7 @@ class Grid
       console.log(rowText)
 
   getCell: (row, column) ->
-    cells[row][column]
+    @cells[row][column]
 
 # We will have exactly one instance of this at a time. This is our active moveable block.
 class Block
@@ -40,9 +41,24 @@ class Block
   constructor: ->
 
   lRotate: ->
-    #code
+    for i in [0..3]
+      # (x, y) => (-y, x)
+      tmp = @cells[i][0]
+      @cells[i][0] = @cells[i][1] * -1
+      @cells[i][1] = tmp
   rRotate: ->
-    #code
+    for i in [0..3]
+      # (x, y) => (y, -x)
+      tmp = @cells[i][1]
+      @cells[i][1] = @cells[i][0] * -1
+      @cells[i][0] = tmp
+
+  getCells: ->
+    absCells: [ [], [] ]
+    for i in [0..3]
+      absCells[i].push(top + cells[i][0])
+      absCells[i].push(left + cells[i][1])
+    absCells
 
   iBlock: ->
     top = 0.5
