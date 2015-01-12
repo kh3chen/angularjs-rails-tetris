@@ -1,5 +1,10 @@
-tetris = angular.module('tetris',[
-]);
+tetris = angular.module('tetris',[])
+
+tetris.controller('tetrisCtrl', ($scope) ->  #, Grid, Cell, Block
+  $scope.greeting = 'Hello'
+  $scope.recipient = 'You'
+)
+ 
 
 class Cell
   value: ' '
@@ -19,7 +24,7 @@ class Grid
     for i in [0..21]
       @cells.push([])
       for j in [0..9]
-        @cells[i].push( Cell(i, j) )
+        @cells[i].push( new Cell(i, j) )
 
   draw: ->
     rowText = ''
@@ -39,6 +44,33 @@ class Block
   cells: [] # This is relative to the box
 
   constructor: ->
+
+  moveLeft: ->
+    # Check if left is a viable move
+    # Write code here
+    for i in [0..3]
+      if (left-1 + cells[0] is already_occupied)
+        return false
+    left--
+    true
+
+  moveRight: ->
+    # Check if left is a viable move
+    # Write code here
+    for i in [0..3]
+      if (left+1 + cells[0] is already_occupied)
+        return false
+    left++
+    true
+
+  moveDown: ->
+    # Check if left is a viable move
+    # Write code here
+    for i in [0..3]
+      if (top+1 + cells[0] is already_occupied)
+        return false
+    top++
+    true
 
   lRotate: ->
     for i in [0..3]
@@ -157,3 +189,53 @@ class Block
     # | ##|
     # |   |
     # -----
+
+class Game
+  grid
+  block
+  gameState
+  linesCleared
+
+  constructor: ->
+    @reset()
+
+  reset: ->
+    @grid = new Grid()
+    gameState = 0
+    linesCleared = 0
+
+  getGridText: ->
+    gridText = ""
+    absCells = @grid.getCells()
+    for i in [0..21]
+      for j in [0..9]
+        gridText += absCells[i][j]
+      gridText += "\n"
+    gridText
+
+  generateBlock: ->
+    rand = Math.random(7)
+    switch
+      case 0:
+        block.iBlock()
+        break
+      case 1:
+        block.jBlock()
+        break
+      case 2:
+        block.lBlock()
+        break
+      case 3:
+        block.oBlock()
+        break
+      case 4:
+        block.sBlock()
+        break
+      case 5:
+        block.tBlock()
+        break
+      case 6:
+        block.zBlock()
+        break
+
+
