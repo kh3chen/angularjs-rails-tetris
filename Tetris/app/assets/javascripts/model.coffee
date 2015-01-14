@@ -1,14 +1,15 @@
 angular.module('tetris-model', [])
 
 .factory('Game', [
-  ()->
+  'Grid', 'Block'
+  (Grid, Block)->
     class Game
       constructor: ->
         @reset()
 
       reset: ->
-        @grid = new Grid()
-        @block = new Block(@grid)
+        @grid = new Grid
+        @block = new Block @grid
         @linesCleared = 0
         @gameState = 0
         # 0: New game, game inactive
@@ -36,19 +37,22 @@ angular.module('tetris-model', [])
 .factory('Grid', [
   ()->
     class Grid
-      cells: []
 
       constructor: ->
+        @cells = []
         for i in [0..21]
           @cells.push([])
           for j in [0..9]
             @cells[i].push(' ')
 
-      draw: ->
-        rowText = ''
+      drawText: ->
+        rowText = '\t------------\n'
         for i in [0..21]
+          rowText += '\t|'
           for j in [0..9]
-            rowText += cells[i][j]
+            rowText += @cells[i][j]
+          rowText += '|\n'
+        rowText += '\t------------\n'
         rowText
 
       getCell: (row, column) ->
@@ -58,7 +62,8 @@ angular.module('tetris-model', [])
 ])
 
 .factory('Block', [
-  ()->
+  'Grid',
+  (Grid)->
     class Block
 
       constructor: (@grid) ->
