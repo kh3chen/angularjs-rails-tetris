@@ -58,6 +58,9 @@ angular.module('tetris-model', [])
       getCell: (row, column) ->
         @cells[row][column]
 
+      setCell: (row, column, value) ->
+        @cells[row][column] = value
+
     return Grid
 ])
 
