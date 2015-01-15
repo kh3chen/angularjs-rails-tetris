@@ -6,13 +6,12 @@ angular.module('tetris-controller', ['tetris-model'])
       constructor: ($scope) ->
         console.log "TetrisController constructor"
         $scope.game = new Game
-        #$interval @repaint, 1000
-        @repaint()
+        $scope.game.generateBlock()
+        $interval @repaint, 1000
 
       repaint: ->
-
-        $scope.game.generateBlock()
         $rootScope.tetris_game = $scope.game.grid.drawText()
+        $scope.game.block.down()
 
     return new TetrisController $scope
 
