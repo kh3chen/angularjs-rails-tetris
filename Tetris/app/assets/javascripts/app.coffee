@@ -8,5 +8,4 @@ angular.module 'tetris', [
   ($rootScope) ->
     $rootScope.greeting = 'Hello'
     $rootScope.recipient = 'World'
-    console.log('Hit the rootScope block!')
 ])

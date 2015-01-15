@@ -16,20 +16,8 @@ angular.module('tetris-model', [])
         # 1: Generate block, check if the newly generated block collides with anything
         # 2: Game over state
 
-      generateBlock: ->
-        rand = 0 #Math.floor(Math.random()*7)
-        console.log('generateBlock rand: ' + rand)
-        switch rand
-        # Keyword usage error on case. Lookup switch & case on CoffeeScript
-          when 0 then @block.iBlock()
-          when 1 then @block.jBlock()
-          when 2 then @block.lBlock()
-          when 3 then @block.oBlock()
-          when 4 then @block.sBlock()
-          when 5 then @block.tBlock()
-          when 6 then @block.zBlock()
-
-      moveBlock: ->
+      start: ->
+        @block.generateBlock()
 
     return Game
 
@@ -79,30 +67,60 @@ angular.module('tetris-model', [])
         @left = 0     # Add to cell col (j)
         @cells = []   # This is relative to the box
 
+       generateBlock: ->
+        rand = Math.floor(Math.random()*7)
+        console.log('generateBlock rand: ' + rand)
+        switch rand
+        # Keyword usage error on case. Lookup switch & case on CoffeeScript
+          when 0 then @iBlock()
+          when 1 then @jBlock()
+          when 2 then @lBlock()
+          when 3 then @oBlock()
+          when 4 then @sBlock()
+          when 5 then @tBlock()
+          when 6 then @zBlock()
+
+
       move: (newCells) ->
         oldCells = @getAbsCells(@top, @left, @cells)
         for oc in oldCells
-          #console.log(oc[0] + ' ' + oc[1])
+          console.log(oc[0] + ' ' + oc[1])
           @grid.setCell(oc[0], oc[1], ' ')
         for nc in newCells
           # Desired cell is out of bounds or already occupied
           unless 0 <= nc[0] <= 21 && 0 <= nc[1] <= 9 && @grid.getCell(nc[0], nc[1]) == ' '
-            console.log(15)
             for oc in oldCells
               @grid.setCell(oc[0], oc[1], '*')
-            return
-        console.log(15)
+            console.log('This is an invalid move')
+            return false
         for nc in newCells
           @grid.setCell(nc[0], nc[1], '*')
         true
 
-      down: ->
-        #console.log('down')
+      moveLeft: ->
+        console.log("left")
+        if @move(@getAbsCells(@top, @left-1, @cells))
+          @left--
+
+      moveRight: ->
+        if @move(@getAbsCells(@top, @left+1, @cells))
+          @left++
+
+      moveDown: ->
         if @move(@getAbsCells(@top+1, @left, @cells))
           @top++
+        else
+          # Find affected rows for line clear
+          rows = []
+
+          @generateBlock()
 
       lRotate: ->
-        newCells = @cells
+        newCells = []
+        for i in [0..3]
+          newCells.push([])
+          newCells[i].push(@cells[i][0])
+          newCells[i].push(@cells[i][1])
         for i in [0..3]
           # (x, y) => (-y, x)
           tmp = newCells[i][0]
@@ -112,6 +130,11 @@ angular.module('tetris-model', [])
           @cells = newCells
 
       rRotate: ->
+        newCells = []
+        for i in [0..3]
+          newCells.push([])
+          newCells[i].push(@cells[i][0])
+          newCells[i].push(@cells[i][1])
         for i in [0..3]
           # (x, y) => (y, -x)
           tmp = newCells[i][1]

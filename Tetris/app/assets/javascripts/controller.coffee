@@ -1,18 +1,33 @@
 angular.module('tetris-controller', ['tetris-model'])
 .controller('tetrisCtrl', [
-  '$rootScope', '$scope', '$interval', 'Game', 'Grid', 'Block',
-  ($rootScope, $scope, $interval, Game, Grid, Block) ->
-    class TetrisController
-      constructor: ($scope) ->
-        console.log "TetrisController constructor"
-        $scope.game = new Game
-        $scope.game.generateBlock()
-        $interval @repaint, 1000
+  '$rootScope', '$scope', '$interval', '$timeout', 'Game', 'Grid', 'Block',
+  ($rootScope, $scope, $interval, $timeout, Game, Grid, Block) ->
+      console.log "tetris-controller"
+      $scope.game = new Game
+      $scope.game.start()
 
-      repaint: ->
+      tick = ->
+        console.log("tick")
+        $rootScope.count++
+        $scope.game.block.moveDown()
         $rootScope.tetris_game = $scope.game.grid.drawText()
-        $scope.game.block.down()
 
-    return new TetrisController $scope
+      $scope.keyEvent = ($event)->
+        console.log ($event.keyCode)
+        switch $event.keyCode
+          when 37 #left
+            $scope.game.block.moveLeft()
+          when 38 #up
+            $scope.game.block.rRotate()
+          when 39 #right
+            $scope.game.block.moveRight()
+          when 40 #down
+            $scope.game.block.moveDown()
+         $rootScope.tetris_game = $scope.game.grid.drawText()
+
+      tick()
+      $interval tick 500
+
+      #handle keypress and trigger repaint
 
 ])
