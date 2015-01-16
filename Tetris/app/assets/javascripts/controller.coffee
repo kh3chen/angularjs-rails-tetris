@@ -26,7 +26,7 @@ angular.module('tetris-controller', ['tetris-model'])
         if Grid.gameState == 0
           Game.start()
           update()
-          tick()
+          $timeout tick, Grid.delay
           return
         else if Grid.gameState == 2
           if $event.keyCode == 82
@@ -34,7 +34,7 @@ angular.module('tetris-controller', ['tetris-model'])
             $scope.gameOverText = ""
             Game.init()
             Game.start()
-            tick()
+            $timeout tick, Grid.delay
           return
 
         switch $event.keyCode

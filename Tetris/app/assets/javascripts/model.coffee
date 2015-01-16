@@ -50,10 +50,15 @@ angular.module('tetris-model', [])
       for i in [0..21]
         images.push([])
         for j in [0..9]
-          if @cells[i][j] == ' '
-            images[i].push("http://i.imgur.com/G6wBMhi.png")
-          else
-            images[i].push("http://i.imgur.com/vkJGOxR.png")
+          switch @cells[i][j]
+            when ' ' then images[i].push("http://i.imgur.com/NSjUI4g.png") #grey
+            when 'I' then images[i].push("http://i.imgur.com/fmu5rEI.png") #cyan
+            when 'J' then images[i].push("http://i.imgur.com/emUhSwL.png") #blue
+            when 'L' then images[i].push("http://i.imgur.com/TFKSbY1.png") #orange
+            when 'O' then images[i].push("http://i.imgur.com/mVFwUDl.png") #yellow
+            when 'S' then images[i].push("http://i.imgur.com/vkJGOxR.png") #green
+            when 'T' then images[i].push("http://i.imgur.com/YDlsnom.png") #magenta
+            when 'Z' then images[i].push("http://i.imgur.com/DHqBJFh.png") #red
       return images
 
     getCell: (row, column) ->
@@ -90,10 +95,8 @@ angular.module('tetris-model', [])
 ])
 
 .factory('Block', [
-  #'Grid', 'dispatcher',
-  'Grid',
-  #(Grid, dispatcher)->
-  (Grid)->
+  '$http', 'Grid',
+  ($http, Grid)->
     init: ->
       @top = 0      # Add to cell row (i)
       @left = 0     # Add to cell col (j)
@@ -105,7 +108,7 @@ angular.module('tetris-model', [])
     getNextBlocks: ->
       out = ''
       for i in [0..@queueMin-1]
-        out += @blockQueue[i] + ' '
+        if @blockQueue[i] then out += @blockQueue[i] + ' '
       console.log(out)
       return out
 
@@ -135,7 +138,12 @@ angular.module('tetris-model', [])
       @blockQueue.splice(0, 1)
       unless @move(@getAbsCells(@top, @left, @cells), true)
         Grid.gameState = 2
-        #dispatcher.trigger 'new_highscore' {"Player", @linesCleared}
+        #submit highscore
+        $http.post("/highscores/new", {name: "Player"},{score: Grid.score})
+        .success (successData={}, status=200, headers={}, config={}) =>
+          console.log("Create Highscore Success")
+        .error (failureData={}, status=400, headers={}, config={}) =>
+          console.log("Create Highscore Error")
 
 
     move: (newCells, newBlock=false) ->
@@ -180,11 +188,11 @@ angular.module('tetris-model', [])
         Grid.linesCleared += linesCleared
         Grid.level = Math.floor(Grid.linesCleared / Grid.lpl)
         switch linesCleared
-          when 0 Grid.score += Math.floor(@top)
-          when 1 Grid.score += 40 * linesCleared * Grid.level + Math.floor(@top)
-          when 2 Grid.score += 100 * linesCleared * Grid.level + Math.floor(@top)
-          when 3 Grid.score += 300 * linesCleared * Grid.level + Math.floor(@top)
-          when 4 Grid.score += 1200 * linesCleared * Grid.level + Math.floor(@top)
+          when 0 then Grid.score += Math.floor(@top)
+          when 1 then Grid.score += 40 * linesCleared * Grid.level + Math.floor(@top)
+          when 2 then Grid.score += 100 * linesCleared * Grid.level + Math.floor(@top)
+          when 3 then Grid.score += 300 * linesCleared * Grid.level + Math.floor(@top)
+          when 4 then Grid.score += 1200 * linesCleared * Grid.level + Math.floor(@top)
 
 
         Grid.delay = Math.max(1000 - Grid.level* 100, 100)
