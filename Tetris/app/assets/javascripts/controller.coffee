@@ -14,8 +14,9 @@ angular.module('tetris-controller', ['tetris-model'])
       $scope.keyEvent = ($event)->
         if Game.gameState == 0
           Game.start()
+          $rootScope.tetris_game = Grid.drawText()
           $interval tick, 500
-          break
+          return
         console.log ($event.keyCode)
         switch $event.keyCode
           when 37 #left
