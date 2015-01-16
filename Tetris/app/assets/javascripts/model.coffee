@@ -179,7 +179,14 @@ angular.module('tetris-model', [])
         linesCleared = Grid.clearLines(rows)
         Grid.linesCleared += linesCleared
         Grid.level = Math.floor(Grid.linesCleared / Grid.lpl)
-        Grid.score += 50 * linesCleared * Grid.level + Math.floor(@top)
+        switch linesCleared
+          when 0 Grid.score += Math.floor(@top)
+          when 1 Grid.score += 40 * linesCleared * Grid.level + Math.floor(@top)
+          when 2 Grid.score += 100 * linesCleared * Grid.level + Math.floor(@top)
+          when 3 Grid.score += 300 * linesCleared * Grid.level + Math.floor(@top)
+          when 4 Grid.score += 1200 * linesCleared * Grid.level + Math.floor(@top)
+
+
         Grid.delay = Math.max(1000 - Grid.level* 100, 100)
         unless @gameState == 2
           @generateBlock()
