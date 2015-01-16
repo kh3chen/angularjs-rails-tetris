@@ -24,6 +24,8 @@ angular.module('tetris-model', [])
       # 0: New game, game inactive
       # 1: Generate block, check if the newly generated block collides with anything
       # 2: Game over state
+      @delay = 1000
+      @lpl = 1  #Lines per level
       @linesCleared = 0
       @cells = []
       for i in [0..21]
@@ -149,6 +151,7 @@ angular.module('tetris-model', [])
               break
           if unvisited then rows.push(@top + c[0])
         Grid.linesCleared += Grid.clearLines(rows)
+        Grid.delay = Math.max(1000 - Math.floor(Grid.linesCleared / Grid.lpl) * 100, 100)
         unless @gameState == 2
           @generateBlock()
         return false

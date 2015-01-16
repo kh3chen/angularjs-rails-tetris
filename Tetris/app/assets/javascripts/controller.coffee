@@ -5,7 +5,7 @@ angular.module('tetris-controller', ['tetris-model'])
       Game.init()
 
       tick = ->
-        console.log(Grid.gameState)
+        console.log(Grid.delay)
         if Grid.gameState == 2
           $rootScope.gameOverText = "Game Over! Press R to restart."
           return
@@ -14,20 +14,21 @@ angular.module('tetris-controller', ['tetris-model'])
         $rootScope.lines_cleared = Grid.linesCleared
         $rootScope.tetris_game = Grid.drawText()
         $scope.images = Grid.getImages()
+        $timeout tick, Grid.delay
 
       $scope.keyEvent = ($event)->
-        console.log($event.keyCode)
         if Grid.gameState == 0
           Game.start()
           $rootScope.tetris_game = Grid.drawText()
           $scope.images = Grid.getImages()
-          $interval tick, 500
+          tick()
           return
         else if Grid.gameState == 2
           if $event.keyCode == 82
             $rootScope.gameOverText = ""
             Game.init()
             Game.start()
+            tick()
           return
 
         switch $event.keyCode
