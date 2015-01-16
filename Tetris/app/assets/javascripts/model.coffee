@@ -61,6 +61,16 @@ angular.module('tetris-model', [])
             when 'Z' then images[i].push("http://i.imgur.com/DHqBJFh.png") #red
       return images
 
+    getDoge: ->
+      images = []
+      for i in [0..21]
+        images.push([])
+        for j in [0..9]
+          switch @cells[i][j]
+            when ' ' then images[i].push("http://i.imgur.com/TcFmQkq.png")
+            else images[i].push("http://fc03.deviantart.net/fs70/f/2014/096/a/f/af64d6dd72003fe6d719a4d9acf0ea18-d7bin7u.gif")
+      return images
+
     getCell: (row, column) ->
       @cells[row][column]
 

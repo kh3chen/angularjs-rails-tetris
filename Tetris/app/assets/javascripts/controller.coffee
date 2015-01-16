@@ -2,6 +2,7 @@ angular.module('tetris-controller', ['tetris-model'])
 .controller('tetrisCtrl', [
   '$scope', '$interval', '$timeout', 'Game', 'Grid', 'Block',
   ($scope, $interval, $timeout, Game, Grid, Block) ->
+      doge = false
       Game.init()
 
       update = ->
@@ -9,7 +10,11 @@ angular.module('tetris-controller', ['tetris-model'])
         $scope.score = Grid.score
         $scope.next_blocks = Block.getNextBlocks()
         $scope.tetris_game = Grid.drawText()
-        $scope.images = Grid.getImages()
+        if (doge)
+          console.log("doge")
+          $scope.images = Grid.getDoge()
+        else
+          $scope.images = Grid.getImages()
 
 
       tick = ->
