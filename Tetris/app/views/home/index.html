@@ -1,6 +1,9 @@
 <div class="container-fluid" ng-app="tetris" ng-controller="tetrisCtrl" ng-keydown="keyEvent($event)" tabindex="0">
   <div>
-    <p>Lines cleared: {{lines_cleared}}</p>
+    <h1>{{gameOverText}}</h1>
+    <p>
+      Lines cleared: {{lines_cleared}}
+    </p>
     <p ng-repeat="row in images track by $index">
       <span ng-repeat="col in row track by $index">
         <img ng-src="{{col}}">

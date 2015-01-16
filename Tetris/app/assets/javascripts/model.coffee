@@ -9,20 +9,21 @@ angular.module('tetris-model', [])
     reset: ->
       Grid.init()
       Block.init()
-      @gameState = 0
-      # 0: New game, game inactive
-      # 1: Generate block, check if the newly generated block collides with anything
-      # 2: Game over state
+
 
     start: ->
       Block.generateBlock()
-      @gameState = 1
+      Grid.gameState = 1
 
 ])
 
 .factory('Grid', [
   ()->
     init: ->
+      @gameState = 0
+      # 0: New game, game inactive
+      # 1: Generate block, check if the newly generated block collides with anything
+      # 2: Game over state
       @linesCleared = 0
       @cells = []
       for i in [0..21]
@@ -105,7 +106,7 @@ angular.module('tetris-model', [])
         when 5 then @tBlock()
         when 6 then @zBlock()
       unless @move(@getAbsCells(@top, @left, @cells), true)
-        @gameState = 2
+        Grid.gameState = 2
         #dispatcher.trigger 'new_highscore' {"Player", @linesCleared}
 
 
@@ -136,6 +137,7 @@ angular.module('tetris-model', [])
     moveDown: ->
       if @move(@getAbsCells(@top+1, @left, @cells))
         @top++
+        return true
       else
         # Find affected rows for line clear
         rows = []
@@ -149,6 +151,12 @@ angular.module('tetris-model', [])
         Grid.linesCleared += Grid.clearLines(rows)
         unless @gameState == 2
           @generateBlock()
+        return false
+
+    drop: ->
+      while @moveDown()
+        true
+
 
     lRotate: ->
       newCells = []
