@@ -11,11 +11,13 @@ angular.module('tetris-controller', ['tetris-model'])
         Block.moveDown()
         $rootScope.lines_cleared = Grid.linesCleared
         $rootScope.tetris_game = Grid.drawText()
+        $scope.images = Grid.getImages()
 
       $scope.keyEvent = ($event)->
         if Game.gameState == 0
           Game.start()
           $rootScope.tetris_game = Grid.drawText()
+          $scope.images = Grid.getImages()
           $interval tick, 500
           return
 
@@ -29,8 +31,10 @@ angular.module('tetris-controller', ['tetris-model'])
           when 40 #down
             Block.moveDown()
          $rootScope.tetris_game = Grid.drawText()
+         $scope.images = Grid.getImages()
 
       $rootScope.tetris_game = Grid.drawText()
+      $scope.images = Grid.getImages()
 
 
       #handle keypress and trigger repaint

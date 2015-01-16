@@ -40,6 +40,17 @@ angular.module('tetris-model', [])
       rowText += '\t------------\n'
       rowText
 
+    getImages: ->
+      images = []
+      for i in [0..21]
+        images.push([])
+        for j in [0..9]
+          if @cells[i][j] == ' '
+            images[i].push("http://i.imgur.com/G6wBMhi.png")
+          else
+            images[i].push("http://i.imgur.com/vkJGOxR.png")
+      return images
+
     getCell: (row, column) ->
       @cells[row][column]
 
