@@ -18,6 +18,7 @@ angular.module('tetris-model', [])
 
     start: ->
       Block.generateBlock()
+      @gameState = 1
 
 ])
 
@@ -71,7 +72,7 @@ angular.module('tetris-model', [])
 
       console.log(fullRows)
 
-      return fullRows.length()
+      return fullRows.length
 ])
 
 .factory('Block', [
@@ -81,6 +82,7 @@ angular.module('tetris-model', [])
       @top = 0      # Add to cell row (i)
       @left = 0     # Add to cell col (j)
       @cells = []   # This is relative to the box
+      @value = ''
 
      generateBlock: ->
       rand = Math.floor(Math.random()*7)
@@ -105,11 +107,11 @@ angular.module('tetris-model', [])
         # Desired cell is out of bounds or already occupied
         unless 0 <= nc[0] <= 21 && 0 <= nc[1] <= 9 && Grid.getCell(nc[0], nc[1]) == ' '
           for oc in oldCells
-            Grid.setCell(oc[0], oc[1], '*')
+            Grid.setCell(oc[0], oc[1], @value)
           console.log('This is an invalid move')
           return false
       for nc in newCells
-        Grid.setCell(nc[0], nc[1], '*')
+        Grid.setCell(nc[0], nc[1], @value)
       true
 
     moveLeft: ->
@@ -181,6 +183,7 @@ angular.module('tetris-model', [])
       absCells
 
     iBlock: ->
+      @value = 'I'
       @top = 0.5
       @left = 4.5
       @cells =
@@ -197,6 +200,7 @@ angular.module('tetris-model', [])
       # ------
 
     jBlock: ->
+      @value = 'J'
       @top = 0
       @left = 4
       @cells =
@@ -212,6 +216,7 @@ angular.module('tetris-model', [])
       # -----
 
     lBlock: ->
+      @value = 'L'
       @top = 0
       @left = 4
       @cells =
@@ -227,6 +232,7 @@ angular.module('tetris-model', [])
       # -----
 
     oBlock: ->
+      @value = 'O'
       @top = 0.5
       @left = 4.5
       @cells =
@@ -241,6 +247,7 @@ angular.module('tetris-model', [])
       # ----
 
     sBlock: ->
+      @value = 'S'
       @top = 1
       @left = 4
       @cells =
@@ -256,6 +263,7 @@ angular.module('tetris-model', [])
       # -----
 
     tBlock: ->
+      @value = 'T'
       @top = 0
       @left = 4
       @cells =
@@ -271,6 +279,7 @@ angular.module('tetris-model', [])
       # -----
 
     zBlock: ->
+      @value = 'Z'
       @top = 1
       @left = 4
       @cells =

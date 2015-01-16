@@ -4,7 +4,6 @@ angular.module('tetris-controller', ['tetris-model'])
   ($rootScope, $scope, $interval, $timeout, Game, Grid, Block) ->
       console.log "tetris-controller"
       Game.init()
-      Game.start()
 
       tick = ->
         console.log("tick")
@@ -13,6 +12,10 @@ angular.module('tetris-controller', ['tetris-model'])
         $rootScope.tetris_game = Grid.drawText()
 
       $scope.keyEvent = ($event)->
+        if Game.gameState == 0
+          Game.start()
+          $interval tick, 500
+          break
         console.log ($event.keyCode)
         switch $event.keyCode
           when 37 #left
@@ -26,7 +29,7 @@ angular.module('tetris-controller', ['tetris-model'])
          $rootScope.tetris_game = Grid.drawText()
 
       $rootScope.tetris_game = Grid.drawText()
-      $interval tick, 500
+
 
       #handle keypress and trigger repaint
 
