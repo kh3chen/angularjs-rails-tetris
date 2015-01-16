@@ -13,6 +13,7 @@ angular.module('tetris-controller', ['tetris-model'])
         Block.moveDown()
         $rootScope.level = Grid.level
         $rootScope.score = Grid.score
+        $rootScope.next_block = Block.blockQueue[0]
         $rootScope.tetris_game = Grid.drawText()
         $scope.images = Grid.getImages()
         $timeout tick, Grid.delay

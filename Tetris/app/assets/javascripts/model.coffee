@@ -98,20 +98,26 @@ angular.module('tetris-model', [])
       @top = 0      # Add to cell row (i)
       @left = 0     # Add to cell col (j)
       @cells = []   # This is relative to the box
-      @blockBag = []
+      @blockQueue = []
+      @queueMin = 4
       @value = ''
 
      generateBlock: ->
-      if @blockBag.length == 0
-        @blockBag = ['I', 'I', 'I', 'I',
+      if @blockQueue.length <= @queueMin
+        blockBag = ['I', 'I', 'I', 'I',
                     'J', 'J', 'J', 'J',
                     'L', 'L', 'L', 'L',
                     'O', 'O', 'O', 'O',
                     'S', 'S', 'S', 'S',
                     'T', 'T', 'T', 'T',
                     'Z', 'Z', 'Z', 'Z' ]
-      rand = Math.floor(Math.random()*@blockBag.length)
-      switch @blockBag[rand]
+        for i in [blockBag.length-1..0]
+          rand = Math.floor(Math.random()*i)
+          @blockQueue.push(blockBag[rand])
+          blockBag.splice(rand, 1)
+          console.log(blockBag)
+
+      switch @blockQueue[0]
       # Keyword usage error on case. Lookup switch & case on CoffeeScript
         when 'I' then @iBlock()
         when 'J' then @jBlock()
@@ -120,8 +126,8 @@ angular.module('tetris-model', [])
         when 'S' then @sBlock()
         when 'T' then @tBlock()
         when 'Z' then @zBlock()
-      @blockBag.splice(rand, 1)
-      console.log(@blockBag)
+      @blockQueue.splice(0, 1)
+      console.log(@blockQueue)
       unless @move(@getAbsCells(@top, @left, @cells), true)
         Grid.gameState = 2
         #dispatcher.trigger 'new_highscore' {"Player", @linesCleared}

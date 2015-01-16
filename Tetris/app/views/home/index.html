@@ -2,8 +2,11 @@
   <div>
     <h1>{{gameOverText}}</h1>
     <p>
-      Level: {{level}}&nbsp;&nbsp;&nbsp;&nbsp;Score: {{score}}
+      Level: {{level}}&nbsp;&nbsp;&nbsp;&nbsp;Score: {{score}}&nbsp;&nbsp;&nbsp;&nbsp;Next: {{next_block}}
     </p>
+
+    <pre> {{tetris_game}} </pre>
+
     <p ng-repeat="row in images track by $index">
       <span ng-repeat="col in row track by $index">
         <img ng-src="{{col}}">
