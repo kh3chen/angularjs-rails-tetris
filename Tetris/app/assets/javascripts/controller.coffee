@@ -4,6 +4,14 @@ angular.module('tetris-controller', ['tetris-model'])
   ($rootScope, $scope, $interval, $timeout, Game, Grid, Block) ->
       Game.init()
 
+      update = ->
+        $rootScope.level = Grid.level
+        $rootScope.score = Grid.score
+        $rootScope.next_blocks = Block.getNextBlocks()
+        $rootScope.tetris_game = Grid.drawText()
+        $scope.images = Grid.getImages()
+
+
       tick = ->
         console.log(Grid.delay)
         console.log(Grid.level)
@@ -11,18 +19,13 @@ angular.module('tetris-controller', ['tetris-model'])
           $rootScope.gameOverText = "Game Over! Press R to restart."
           return
         Block.moveDown()
-        $rootScope.level = Grid.level
-        $rootScope.score = Grid.score
-        $rootScope.next_block = Block.blockQueue[0]
-        $rootScope.tetris_game = Grid.drawText()
-        $scope.images = Grid.getImages()
+        update()
         $timeout tick, Grid.delay
 
       $scope.keyEvent = ($event)->
         if Grid.gameState == 0
           Game.start()
-          $rootScope.tetris_game = Grid.drawText()
-          $scope.images = Grid.getImages()
+          update()
           tick()
           return
         else if Grid.gameState == 2
@@ -48,13 +51,7 @@ angular.module('tetris-controller', ['tetris-model'])
             Block.rRotate()
           when 32
             Block.drop()
-         $rootScope.tetris_game = Grid.drawText()
-         $scope.images = Grid.getImages()
+         update()
 
-      $rootScope.tetris_game = Grid.drawText()
-      $scope.images = Grid.getImages()
-
-
-      #handle keypress and trigger repaint
-
+      update()
 ])
