@@ -27,6 +27,8 @@ angular.module('tetris-model', [])
       @delay = 1000
       @lpl = 1  #Lines per level
       @linesCleared = 0
+      @level = 1
+      @score = 0
       @cells = []
       for i in [0..21]
         @cells.push([])
@@ -66,6 +68,8 @@ angular.module('tetris-model', [])
 
     clearLines: (rows) ->
       fullRows = []
+      rows = rows.sort()
+      console.log(rows)
       for r in rows
         lineFull = true
         for j in [0..9]
@@ -150,8 +154,11 @@ angular.module('tetris-model', [])
               unvisited = false
               break
           if unvisited then rows.push(@top + c[0])
-        Grid.linesCleared += Grid.clearLines(rows)
-        Grid.delay = Math.max(1000 - Math.floor(Grid.linesCleared / Grid.lpl) * 100, 100)
+        linesCleared = Grid.clearLines(rows)
+        Grid.linesCleared += linesCleared
+        Grid.level = Math.floor(Grid.linesCleared / Grid.lpl)
+        Grid.score += 50 * linesCleared * Grid.level + Math.floor(@top)
+        Grid.delay = Math.max(1000 - Grid.level* 100, 100)
         unless @gameState == 2
           @generateBlock()
         return false
