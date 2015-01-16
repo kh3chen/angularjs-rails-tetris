@@ -4,8 +4,8 @@ angular.module 'tetris', [
 ]
 .run([
   '$rootScope'
-
   ($rootScope) ->
     $rootScope.greeting = 'Hello'
     $rootScope.recipient = 'World'
+    console.log("rootScope")
 ])
