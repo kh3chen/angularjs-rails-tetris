@@ -51,7 +51,7 @@ angular.module('tetris-model', [])
         images.push([])
         for j in [0..9]
           switch @cells[i][j]
-            when ' ' then images[i].push("http://i.imgur.com/NSjUI4g.png") #grey
+            when ' ' then images[i].push("http://i.imgur.com/novPPKe.png") #grey
             when 'I' then images[i].push("http://i.imgur.com/fmu5rEI.png") #cyan
             when 'J' then images[i].push("http://i.imgur.com/emUhSwL.png") #blue
             when 'L' then images[i].push("http://i.imgur.com/TFKSbY1.png") #orange
@@ -139,7 +139,7 @@ angular.module('tetris-model', [])
       unless @move(@getAbsCells(@top, @left, @cells), true)
         Grid.gameState = 2
         #submit highscore
-        $http.post("/highscores/new", {name: "Player"},{score: Grid.score})
+        $http.post("/highscores/create", {name: "Player", score: Grid.score})
         .success (successData={}, status=200, headers={}, config={}) =>
           console.log("Create Highscore Success")
         .error (failureData={}, status=400, headers={}, config={}) =>

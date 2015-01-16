@@ -34,6 +34,7 @@ angular.module('tetris-controller', ['tetris-model'])
             $scope.gameOverText = ""
             Game.init()
             Game.start()
+            update()
             $timeout tick, Grid.delay
           return
 
