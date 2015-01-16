@@ -3,7 +3,6 @@ angular.module 'tetris', [
   'tetris-controller'
 ]
 .run([
-  '$rootScope'
-  ($rootScope) ->
+  () ->
 
 ])
