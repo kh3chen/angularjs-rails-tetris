@@ -4,13 +4,11 @@ angular.module('tetris-model', [])
   'Grid', 'Block'
   (Grid, Block)->
     init: ->
-      console.log("test")
       @reset()
 
     reset: ->
       Grid.init()
       Block.init()
-      @linesCleared = 0
       @gameState = 0
       # 0: New game, game inactive
       # 1: Generate block, check if the newly generated block collides with anything
@@ -25,6 +23,7 @@ angular.module('tetris-model', [])
 .factory('Grid', [
   ()->
     init: ->
+      @linesCleared = 0
       @cells = []
       for i in [0..21]
         @cells.push([])
@@ -52,7 +51,6 @@ angular.module('tetris-model', [])
         @cells[cells[0]][cells[1]] = value
 
     clearLines: (rows) ->
-      console.log(rows)
       fullRows = []
       for r in rows
         lineFull = true
@@ -70,13 +68,13 @@ angular.module('tetris-model', [])
         for j in [0..9]
           @cells[0][j] = ' '
 
-      console.log(fullRows)
-
       return fullRows.length
 ])
 
 .factory('Block', [
+  #'Grid', 'dispatcher',
   'Grid',
+  #(Grid, dispatcher)->
   (Grid)->
     init: ->
       @top = 0      # Add to cell row (i)
@@ -86,7 +84,6 @@ angular.module('tetris-model', [])
 
      generateBlock: ->
       rand = Math.floor(Math.random()*7)
-      console.log('generateBlock rand: ' + rand)
       switch rand
       # Keyword usage error on case. Lookup switch & case on CoffeeScript
         when 0 then @iBlock()
@@ -96,26 +93,28 @@ angular.module('tetris-model', [])
         when 4 then @sBlock()
         when 5 then @tBlock()
         when 6 then @zBlock()
+      unless @move(@getAbsCells(@top, @left, @cells), true)
+        @gameState = 2
+        #dispatcher.trigger 'new_highscore' {"Player", @linesCleared}
 
 
-    move: (newCells) ->
-      oldCells = @getAbsCells(@top, @left, @cells)
-      for oc in oldCells
-        console.log(oc[0] + ' ' + oc[1])
-        Grid.setCell(oc[0], oc[1], ' ')
+    move: (newCells, newBlock=false) ->
+      unless newBlock
+        oldCells = @getAbsCells(@top, @left, @cells)
+        for oc in oldCells
+          Grid.setCell(oc[0], oc[1], ' ')
       for nc in newCells
         # Desired cell is out of bounds or already occupied
         unless 0 <= nc[0] <= 21 && 0 <= nc[1] <= 9 && Grid.getCell(nc[0], nc[1]) == ' '
-          for oc in oldCells
-            Grid.setCell(oc[0], oc[1], @value)
-          console.log('This is an invalid move')
+          unless newBlock
+            for oc in oldCells
+              Grid.setCell(oc[0], oc[1], @value)
           return false
       for nc in newCells
         Grid.setCell(nc[0], nc[1], @value)
       true
 
     moveLeft: ->
-      console.log("left")
       if @move(@getAbsCells(@top, @left-1, @cells))
         @left--
 
@@ -136,8 +135,9 @@ angular.module('tetris-model', [])
               unvisited = false
               break
           if unvisited then rows.push(@top + c[0])
-        Grid.clearLines(rows)
-        @generateBlock()
+        Grid.linesCleared += Grid.clearLines(rows)
+        unless @gameState == 2
+          @generateBlock()
 
     lRotate: ->
       newCells = []
@@ -191,7 +191,6 @@ angular.module('tetris-model', [])
           [-0.5, -0.5],
           [-0.5, 0.5],
           [-0.5, 1.5] ]
-      @move(@getAbsCells(@top, @left, @cells))
       # ______
       # |    |
       # |####|
@@ -208,7 +207,6 @@ angular.module('tetris-model', [])
           [0, 0],
           [0, 1],
           [1, 1] ]
-      @move(@getAbsCells(@top, @left, @cells))
       # _____
       # |   |
       # |###|
@@ -224,7 +222,6 @@ angular.module('tetris-model', [])
           [0, 0],
           [0, 1],
           [1, -1] ]
-      @move(@getAbsCells(@top, @left, @cells))
       # _____
       # |   |
       # |###|
@@ -240,7 +237,6 @@ angular.module('tetris-model', [])
           [-0.5, 0.5],
           [0.5, -0.5],
           [0.5, 0.5] ]
-      @move(@getAbsCells(@top, @left, @cells))
       # ____
       # |##|
       # |##|
@@ -255,7 +251,6 @@ angular.module('tetris-model', [])
           [-1, 1],
           [0, -1],
           [0, 0] ]
-      @move(@getAbsCells(@top, @left, @cells))
       # _____
       # | ##|
       # |## |
@@ -271,7 +266,6 @@ angular.module('tetris-model', [])
           [0, 0],
           [0, 1],
           [1, 0] ]
-      @move(@getAbsCells(@top, @left, @cells))
       # _____
       # |   |
       # |###|
@@ -287,7 +281,6 @@ angular.module('tetris-model', [])
           [-1, 0],
           [0, 0],
           [0, 1] ]
-      @move(@getAbsCells(@top, @left, @cells))
       # _____
       # |## |
       # | ##|

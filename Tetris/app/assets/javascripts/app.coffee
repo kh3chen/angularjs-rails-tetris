@@ -5,7 +5,7 @@ angular.module 'tetris', [
 .run([
   '$rootScope'
   ($rootScope) ->
-    $rootScope.greeting = 'Hello'
-    $rootScope.recipient = 'World'
+    $rootScope.greeting = 'Tetris'
+    $rootScope.recipient = 'Let\'s Play'
     console.log("rootScope")
 ])

@@ -1,6 +1,7 @@
 <div class="container-fluid" ng-app="tetris" ng-controller="tetrisCtrl" ng-keydown="keyEvent($event)" tabindex="0">
   <div>
     <h1>{{greeting}}, {{recipient}}!</h1>
+    <p>Lines cleared: {{lines_cleared}}</p>
     <pre>{{tetris_game}}</pre>
 
   </div>
