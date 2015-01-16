@@ -218,6 +218,15 @@ angular.module('tetris-model', [])
         newCells[i][1] = tmp
       if @move(@getAbsCells(@top, @left, newCells))
         @cells = newCells
+      else if @move(@getAbsCells(@top, @left+1, newCells))
+        @left++
+        @cells = newCells
+      else if @move(@getAbsCells(@top, @left-1, newCells))
+        @left--
+        @cells = newCells
+      else if @move(@getAbsCells(@top+1, @left, newCells))
+        @top++
+        @cells = newCells
 
     rRotate: ->
       newCells = []
@@ -237,6 +246,9 @@ angular.module('tetris-model', [])
         @cells = newCells
       else if @move(@getAbsCells(@top, @left-1, newCells))
         @left--
+        @cells = newCells
+      else if @move(@getAbsCells(@top+1, @left, newCells))
+        @top++
         @cells = newCells
 
     getAbsCells: (top, left, cells) ->
