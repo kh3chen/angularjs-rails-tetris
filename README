@@ -1,0 +1,5 @@
+Requires a Rails server (rbenv).
+To run, go into Tetris/ and run `rails server` (or `rails s` for short).
+Once the server is running, go to "localhost:3000" in a browser.
+
+This app is only tested in Chrome Version 33.
