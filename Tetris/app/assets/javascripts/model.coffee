@@ -25,7 +25,7 @@ angular.module('tetris-model', [])
       # 1: Generate block, check if the newly generated block collides with anything
       # 2: Game over state
       @delay = 1000
-      @lpl = 1  #Lines per level
+      @lpl = 10  #Lines per level
       @linesCleared = 0
       @level = 1
       @score = 0
